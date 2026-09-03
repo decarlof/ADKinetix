@@ -5090,6 +5090,7 @@
 32idK1:cam1:DetectorState_RBV
 32idK1:cam1:ShutterMode_RBV
 32idK1:cam1:ShutterStatusEPICS_RBV
+32idK1:cam1:UniqueIdMode_RBV
 32idK1:cam1:ReadoutPortIdx_RBV
 32idK1:cam1:SpeedIdx_RBV
 32idK1:cam1:GainIdx_RBV
@@ -5361,6 +5362,7 @@
 32idK1:cam1:ImageMode
 32idK1:cam1:TriggerMode
 32idK1:cam1:ShutterMode
+32idK1:cam1:UniqueIdMode
 32idK1:cam1:ReadoutPortIdx
 32idK1:cam1:SpeedIdx
 32idK1:cam1:GainIdx

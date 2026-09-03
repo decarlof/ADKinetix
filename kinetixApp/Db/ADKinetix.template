@@ -99,6 +99,29 @@ record(ai, "$(P)$(R)WaitForFrameTO_RBV") {
 }
 
 
+record(mbbo, "$(P)$(R)UniqueIdMode") {
+    field(DTYP, "asynInt32")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))KTX_UNIQUE_ID_MODE")
+    field(ZRST, "Driver")
+    field(ZRVL, "0")
+    field(ONST, "Camera")
+    field(ONVL, "1")
+    field(VAL, "0")
+    field(PINI, "YES")
+}
+
+
+record(mbbi, "$(P)$(R)UniqueIdMode_RBV") {
+    field(DTYP, "asynInt32")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))KTX_UNIQUE_ID_MODE")
+    field(ZRST, "Driver")
+    field(ZRVL, "0")
+    field(ONST, "Camera")
+    field(ONVL, "1")
+    field(SCAN, "I/O Intr")
+}
+
+
 record(ai, "$(P)$(R)Temperature_RBV") {
     field(DTYP, "asynFloat64")
     field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))KTX_TEMP")

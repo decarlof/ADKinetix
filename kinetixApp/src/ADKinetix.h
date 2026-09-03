@@ -66,6 +66,9 @@ static const char* driverName = "ADKinetix";
 #define KTX_StopAcqOnTimeoutString "KTX_STOP_ACQ_ON_TO"
 #define KTX_WaitForFrameTimeoutString "KTX_WAIT_FOR_FRAME_TO"
 
+// Source of NDArray::uniqueId
+#define KTX_UniqueIdModeString "KTX_UNIQUE_ID_MODE"
+
 // Communication interface signal
 #define KTX_CommInterfaceString "KTX_INTERFACE"
 
@@ -87,6 +90,21 @@ typedef enum {
     KTX_TRIG_EDGE = 1,
     KTX_TRIG_GATE = 2,
 } KTX_TRIG_MODE;
+
+// Source used to populate NDArray::uniqueId
+//
+// Driver: a counter incremented once per frame the driver actually consumes.
+//   Contiguous by construction, so frames dropped between the camera and the
+//   driver are invisible downstream.
+// Camera: FRAME_INFO::FrameNr as reported by PVCAM, 1-based. Gaps in the
+//   sequence are real dropped frames. Plugins running with SortMode=Unsorted
+//   log the gap as a disordered array and pass it on; SortMode=Sorted will
+//   instead stall waiting for a frame that will never arrive, so leave the
+//   plugins Unsorted when using this mode.
+typedef enum {
+    KTX_UNIQUE_ID_DRIVER = 0,
+    KTX_UNIQUE_ID_CAMERA = 1,
+} KTX_UNIQUE_ID_MODE;
 
 // Supported interface modes
 typedef enum {
@@ -130,6 +148,7 @@ class ADKinetix : public ADDriver {
     int KTX_FanSpeed;
     int KTX_StopAcqOnTimeout;
     int KTX_WaitForFrameTimeout;
+    int KTX_UniqueIdMode;
     int KTX_CommInterface;
     int KTX_MinExpRes;
     int KTX_ReadoutMode;

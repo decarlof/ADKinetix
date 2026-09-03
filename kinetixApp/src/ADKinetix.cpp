@@ -526,6 +526,7 @@ ADKinetix::ADKinetix(int deviceIndex, const char *portName)
     createParam(KTX_CommInterfaceString, asynParamInt32, &KTX_CommInterface);
     createParam(KTX_StopAcqOnTimeoutString, asynParamInt32, &KTX_StopAcqOnTimeout);
     createParam(KTX_WaitForFrameTimeoutString, asynParamInt32, &KTX_WaitForFrameTimeout);
+    createParam(KTX_UniqueIdModeString, asynParamInt32, &KTX_UniqueIdMode);
     createParam(KTX_MinExpResString, asynParamInt32, &KTX_MinExpRes);
     createParam(KTX_ReadoutModeString, asynParamOctet, &KTX_ReadoutMode);
     createParam(KTX_ApplyReadoutModeString, asynParamInt32, &KTX_ApplyReadoutMode);
@@ -985,8 +986,19 @@ void ADKinetix::acquisitionThread() {
             arrayCounter++;
             setIntegerParam(NDArrayCounter, arrayCounter);
 
-            // set the image unique ID to the number in the sequence
-            pArray->uniqueId = arrayCounter;
+            // Set the image unique ID, either to the driver's own sequence
+            // number or to the camera's frame number. The two differ only when
+            // the driver could not keep up: the EOF callback always fetches the
+            // newest frame, so a slow consumer silently skips the ones in
+            // between and the driver counter closes over the gap. FrameNr is
+            // taken from the FRAME_INFO the callback was handed, which is the
+            // frame the camera had just finished.
+            int uniqueIdMode;
+            getIntegerParam(KTX_UniqueIdMode, &uniqueIdMode);
+            if (uniqueIdMode == KTX_UNIQUE_ID_CAMERA)
+                pArray->uniqueId = (int)this->cameraContext->eofFrameInfo.FrameNr;
+            else
+                pArray->uniqueId = arrayCounter;
 
             pArray->pAttributeList->add("ColorMode", "Color Mode", NDAttrInt32, &colorMode);
 
