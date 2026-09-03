@@ -1,0 +1,133 @@
+#!/usr/bin/perl
+
+use strict;
+use FindBin;
+
+###################################################################
+# Set Environment Variables to be used by the rest of the scripts #
+###################################################################
+
+BEGIN
+{
+	# Top level of the IOC folder
+	$ENV{TOP} = "$FindBin::RealBin/../../..";
+	
+	
+	# IOC prefix name, used to find the correct iocBoot directory and executable
+	$ENV{IOC_NAME}="32idKinetix";
+	
+	
+	
+	#########################
+	# IOC Executable Config #
+	#########################
+	
+	# Name of the IOC executable file
+	#!$ENV{IOC_BINARY}="$ENV{IOC_NAME}";
+	#! $ENV{IOC_BINARY}="32idKinetix";
+	$ENV{IOC_BINARY}="kinetixApp";
+	
+	
+	# Top-level bin directory for the IOC
+	$ENV{IOC_BIN_DIR}="$ENV{TOP}/bin";
+	#! $ENV{IOC_BIN_DIR}="/home/username/epics/synApps/support/32idKinetix/bin";
+	#! $ENV{IOC_BIN_DIR}="/home/username/epics/synApps/support/module/iocs/exampleIOC/bin";
+	
+	#! $ENV{IOC_BIN_DIR}="/net/s32dserv/xorApps/epics/synApps_6_3/ioc/32idKinetix/bin/";
+	
+	# Architecture the IOC is built under
+	$ENV{EPICS_HOST_ARCH} = "rhel9-x86_64";
+	
+	
+	# Full path to the IOC executable
+	 $ENV{IOC_BIN_PATH}="$ENV{IOC_BIN_DIR}/$ENV{EPICS_HOST_ARCH}/$ENV{IOC_BINARY}";
+
+	###############################
+	# Shared Library Path Config  #
+	###############################
+
+	# The kinetixApp binary carries an RPATH pointing at the directory it was
+	# built in (/data/alberto/ADKinetix), which does not exist here, so
+	# libADKinetix.so is not found and the IOC fails to start. Point
+	# LD_LIBRARY_PATH at the libraries shipped with this ADKinetix tree.
+	my $ADKINETIX_TOP = "$ENV{TOP}/../..";
+
+	$ENV{LD_LIBRARY_PATH} = "$ADKINETIX_TOP/lib/$ENV{EPICS_HOST_ARCH}"
+	                      . ":$ENV{TOP}/lib/$ENV{EPICS_HOST_ARCH}"
+	                      . (defined $ENV{LD_LIBRARY_PATH} ? ":$ENV{LD_LIBRARY_PATH}" : "");
+
+	#! $ENV{IOC_BIN_PATH}="/home/beams/TOMO/epics-ad/synApps/support/areaDetector-R3-12-1/ADKinetix/iocs/kinetixIOC/bin/linux-x86_64/kinetixApp";
+	#! $ENV{IOC_BIN_PATH}="/net/s32dserv/xorApps/epics/synApps_6_3/ioc/32idKinetix/bin/rhel9-x86_64/kinetixApp";
+	
+	
+	###########################
+	# IOC Startup File Config #
+	###########################
+	
+	# Startup Script for the IOC to run
+	$ENV{IOC_STARTUP_FILE}="st.cmd.linux";
+	#! $ENV{IOC_STARTUP_FILE}="st.cmd.Cygwin";
+	#! $ENV{IOC_STARTUP_FILE}="st.cmd.Win32";
+	#! $ENV{IOC_STARTUP_FILE}="st.cmd.Win64";
+	
+	
+	# Directory that contains the startup script
+	#! $ENV{IOC_STARTUP_DIR}="$ENV{TOP}/iocBoot/ioc$ENV{IOC_NAME}";
+	#! $ENV{IOC_STARTUP_DIR}="/home/username/epics/ioc/synApps/32idKinetix/iocBoot/ioc32idKinetix";
+	#! $ENV{IOC_STARTUP_DIR}="/home/beams/TOMO/epics-ad/synApps/support/areaDetector-R3-12-1/ADKinetix/iocs/kinetixIOC/iocBoot/iocKinetix";
+	$ENV{IOC_STARTUP_DIR}="/home/beams/USERTXM/epics/synApps/support/ADKinetix/iocs/kinetixIOC/iocBoot/iocKinetix";
+	
+	# Full path to the startup file
+	$ENV{IOC_STARTUP_FILE_PATH}="$ENV{IOC_STARTUP_DIR}/$ENV{IOC_STARTUP_FILE}";
+	
+	
+	
+	##########################
+	# Config For This Script #
+	##########################
+	
+	# Directory that contains all the command modules to be loaded
+	$ENV{IOC_COMMAND_DIR}="$ENV{IOC_STARTUP_DIR}/softioc/commands";
+	#! $ENV{IOC_COMMAND_DIR}="/home/username/epics/ioc/synApps/32idKinetix/iocBoot/ioc32idKinetix/softioc/commands";
+	#! $ENV{IOC_COMMAND_DIR}="/home/beams/TOMO/epics-ad/synApps/support/areaDetector-R3-12-1/ADKinetix/iocs/kinetixIOC/iocBoot/iocKinetix/softioc/commands";
+	
+	$ENV{IOC_CMD}="$ENV{IOC_BIN_PATH} $ENV{IOC_STARTUP_FILE_PATH}";
+	
+	# Required shell commands
+	$ENV{SCREEN}="screen";
+	$ENV{TELNET}="telnet";
+	$ENV{PROCSERV}="/APSshare/bin/procServ";
+	$ENV{NETCAT}="nc";
+	$ENV{ECHO}="echo";
+}
+
+
+use Env;
+use File::Spec;
+use Module::Loaded;
+use List::Util;
+
+use lib "$IOC_COMMAND_DIR";
+use _info;
+use _commands;
+
+
+#####################################################################
+
+my $GET_SCREEN_PID=1;
+
+#####################################################################
+
+if (! -d $ENV{IOC_COMMAND_DIR})
+{
+	print("Error: IOC command directory ($ENV{IOC_COMMAND_DIR}) doesn't exist.\n");
+	print("IOC_COMMAND_DIR in $FindBin::RealScript needs to be corrected.\n");
+	die;
+}
+
+#####################
+#    Parse Input    #
+#####################
+
+_commands::call("_local", @ARGV);
+

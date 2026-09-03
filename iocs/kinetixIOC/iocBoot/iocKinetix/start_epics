@@ -1,0 +1,15 @@
+#!/bin/csh
+# Modified by AM 12/18/24
+setenv EPICS_APP_AD /APSshare/epics/synApps_6_3/support/areaDetector-R3-12-1/ADCore
+setenv EPICS_APP_ADKIN /data/alberto/ADKinetix
+
+
+#####################
+# prepare MEDM path
+#
+if (! ${?EPICS_DISPLAY_PATH}) setenv EPICS_DISPLAY_PATH '.'
+setenv EPICS_DISPLAY_PATH $EPICS_DISPLAY_PATH':'$EPICS_APP_ADKIN/kinetixApp/op/adl
+setenv EPICS_DISPLAY_PATH $EPICS_DISPLAY_PATH':'$EPICS_APP_AD/ADApp/op/adl
+
+medm -x -macro "P=32idK1:, R=cam1:, C=x_y_z_z" ADKinetix.adl & ../../bin/rhel9-x86_64/kinetixApp st.cmd.linux
+

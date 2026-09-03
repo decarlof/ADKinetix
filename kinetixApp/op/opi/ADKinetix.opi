@@ -445,7 +445,7 @@ $(pv_value)</tooltip>
   <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
     <actions hook="false" hook_all="false">
       <action type="OPEN_DISPLAY">
-        <path>../../../../$(pathAsyn)/asynRecord.opi</path>
+        <path>$(pathAsyn)/asynRecord.opi</path>
         <macros>
           <include_parent_macros>true</include_parent_macros>
           <R>$(R)AsynIO</R>
@@ -454,7 +454,7 @@ $(pv_value)</tooltip>
         <description>asyn record</description>
       </action>
       <action type="OPEN_DISPLAY">
-        <path>../../../../$(pathAutosave)/save_restoreStatus_more.opi</path>
+        <path>$(pathAutosave)/save_restoreStatus_more.opi</path>
         <macros>
           <include_parent_macros>true</include_parent_macros>
         </macros>
@@ -2058,7 +2058,7 @@ $(pv_value)</tooltip>
   <widget typeId="org.csstudio.opibuilder.widgets.ActionButton" version="2.0.0">
     <actions hook="false" hook_all="false">
       <action type="OPEN_DISPLAY">
-        <path>../ADCore/master/commonPlugins.opi</path>
+        <path>$(pathCore)/commonPlugins.opi</path>
         <macros>
           <include_parent_macros>true</include_parent_macros>
         </macros>
@@ -2464,7 +2464,7 @@ $(pv_value)</tooltip>
         <description>Image #2</description>
       </action>
       <action type="OPEN_DISPLAY">
-        <path>../../../../$(pathSscan)/scan_more.opi</path>
+        <path>$(pathSscan)/scan_more.opi</path>
         <macros>
           <include_parent_macros>true</include_parent_macros>
           <S>scan1</S>
@@ -2474,7 +2474,7 @@ $(pv_value)</tooltip>
         <description>Scan #1</description>
       </action>
       <action type="OPEN_DISPLAY">
-        <path>../../../../$(pathCalc)/yySseq.opi</path>
+        <path>$(pathCalc)/yySseq.opi</path>
         <macros>
           <include_parent_macros>true</include_parent_macros>
           <S>AcquireSequence</S>
@@ -2483,7 +2483,7 @@ $(pv_value)</tooltip>
         <description>Acquire Sequence</description>
       </action>
       <action type="OPEN_DISPLAY">
-        <path>../../../../$(pathIocStats)/ioc_stats_soft.opi</path>
+        <path>$(pathIocStats)/ioc_stats_soft.opi</path>
         <macros>
           <include_parent_macros>true</include_parent_macros>
           <ioc>$(P)</ioc>

@@ -496,6 +496,13 @@ void ADKinetix::updateCameraRegion() {
  * @param dims Pointer to array of size_t representing dimensions of each axis
  */
 void ADKinetix::getCurrentFrameDimensions(size_t *dims) {
+    const char *functionName = "getCurrentFrameDimensions"; // Declare functionName
+
+    if (this->cameraContext->region.sbin == 0 || this->cameraContext->region.pbin == 0) {
+        ERR("Binning factor cannot be zero");
+        return;
+    }
+
     dims[0] = (size_t)((this->cameraContext->region.s2 - this->cameraContext->region.s1 + 1) /
                        this->cameraContext->region.sbin);
     dims[1] = (size_t)((this->cameraContext->region.p2 - this->cameraContext->region.p1 + 1) /

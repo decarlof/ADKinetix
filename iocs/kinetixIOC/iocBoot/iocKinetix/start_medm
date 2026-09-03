@@ -1,0 +1,5 @@
+#!/bin/bash
+HERE="$( cd -- "$( dirname -- "${BASH_SOURCE[0]:-$0}"; )" &> /dev/null && pwd 2> /dev/null; )";
+
+${HERE}/start_display.sh MEDM 32idK1: ADKinetix x_y_z_z
+

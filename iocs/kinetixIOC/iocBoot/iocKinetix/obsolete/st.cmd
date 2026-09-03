@@ -30,7 +30,8 @@ NDStdArraysConfigure("Image1", 1, 0, "$(PORT)", 0, 10000000)
 dbLoadRecords("$(ADCORE)/db/NDStdArrays.template", "P=$(PREFIX),R=image:,PORT=Image1,ADDR=0,TIMEOUT=1,NDARRAY_PORT=$(PORT),TYPE=Int16,FTVL=SHORT,NELEMENTS=4194304")
 
 # Load all other plugins using commonPlugins.cmd
-< $(ADCORE)/iocBoot/commonPlugins.cmd
+# < $(ADCORE)/iocBoot/commonPlugins.cmd
+< commonPlugins.cmd
 set_requestfile_path("$(ADKINETIX)/db")
 
 #asynSetTraceIOMask("$(PORT)",0,2)
