@@ -9,3 +9,15 @@ envPaths
 dllPath.bat
 *.sav*
 include/
+
+# APS 32-ID-C additions
+# Per-start IOC console logs written by softioc/commands/start.pm and
+# remote.pm. Nothing prunes them; the 'dummy' placeholders that keep the
+# directories present in a clone are deliberately still tracked.
+iocs/*/iocBoot/*/softioc/logs/*/*.log_*
+.iocsh_history
+
+# Stray build/environment dumps that landed at the repo root from an
+# unrelated tree (/home/beams8/TOMO/...).
+/check
+/variables
